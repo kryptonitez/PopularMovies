@@ -108,7 +108,6 @@ public class DetailsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            textViewLength.setText();
             CustomListView adapter = new
                     CustomListView(DetailsActivity.this, trailerKeys);
             listView.setAdapter(adapter);

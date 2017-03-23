@@ -1,9 +1,10 @@
 package us.devtist.popularmovies;
 
 import android.content.Context;
-import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -11,8 +12,6 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by chris.bounds on 3/22/2017.
@@ -21,10 +20,12 @@ import java.util.List;
 public class GridViewAdapater extends BaseAdapter {
     private Context mContext;
     private ArrayList<String> imageUrls;
+    private Boolean isLandscape;
 
     public GridViewAdapater(Context c, ArrayList<String> s) {
         mContext = c;
         imageUrls = s;
+        isLandscape = mContext.getResources().getBoolean(R.bool.is_landscape);
     }
 
     public int getCount() {
@@ -42,13 +43,19 @@ public class GridViewAdapater extends BaseAdapter {
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
+
+        Log.v("Screen orientation", String.valueOf(mContext.getResources().getBoolean(R.bool.is_landscape)));
+        Log.v("DisplayMetricsWidth" , String.valueOf(mContext.getResources().getDisplayMetrics().widthPixels));
+        Log.v("DisplayMetricsHeight" , String.valueOf(mContext.getResources().getDisplayMetrics().heightPixels));
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
-            int displayHeight = new DisplayMetrics().getDisplayHeight(mContext);
-            int displayWidth = new DisplayMetrics().getDisplayWidth(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(displayWidth/4 + 56, displayHeight/3));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            int displayHeight = mContext.getResources().getDisplayMetrics().heightPixels;
+            int displayWidth = mContext.getResources().getDisplayMetrics().widthPixels;
+            Log.v("displayHeight", String.valueOf(displayHeight));
+            Log.v("displayWidth", String.valueOf(displayWidth));
+            imageView.setLayoutParams(new GridView.LayoutParams(displayWidth/2, displayHeight/2));
+            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         } else {
             imageView = (ImageView) convertView;
         }

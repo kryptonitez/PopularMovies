@@ -33,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
 
         new HttpQueryTask().execute();
 
+        if (savedInstanceState != null) {
+            gridView.setSelection(savedInstanceState.getInt("gridView", 0));
+        }
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
@@ -51,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
             Uri builtUri = Uri.parse("https://api.themoviedb.org/3/movie/popular").buildUpon()
                     .appendQueryParameter("api_key", "")
                     .appendQueryParameter("language", "en-US")
-                    .appendQueryParameter("page", "1")
                     .build();
 
             URL popularMovieUrl = NetworkUtils.buildUrl(builtUri);
@@ -75,5 +78,12 @@ public class MainActivity extends AppCompatActivity {
             }
             gridView.setAdapter(new GridViewAdapater(MainActivity.this, movieImg));
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("gridView", gridView.getFirstVisiblePosition());
+        Log.v("outState", String.valueOf(gridView.getFirstVisiblePosition()));
     }
 }
