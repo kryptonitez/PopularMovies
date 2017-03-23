@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.e("Search Results", searchResults);
+           Log.e("Search Results", searchResults);
             return  searchResults;
         }
 
@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             movieImg = new JsonUtils().saveToStringArray(s, "results", "poster_path");
-;
             for (int i = 0; i < movieImg.size(); i++) {
                 movieImg.set(i, "https://image.tmdb.org/t/p/w500" + movieImg.get(i));
                 Log.v("Movie URLs" , movieImg.get(i));

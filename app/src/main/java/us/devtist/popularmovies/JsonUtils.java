@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -41,7 +42,6 @@ public class JsonUtils {
 
     public ArrayList<String> saveToStringArray (String jsonResults, String nodeName, String resultToSave){
         ArrayList<String> dataList = new ArrayList<String>();
-        if(!jsonResults.equals("")){
             try {
                 JSONObject jsonObject = new JSONObject(jsonResults);
                 JSONArray jsonArray = jsonObject.getJSONArray(nodeName);
@@ -53,7 +53,17 @@ public class JsonUtils {
                 } catch (JSONException e){
                 e.printStackTrace();
             }
-        }
         return dataList;
+    }
+
+    public String saveToString(String jsonResults, String resultToSave) {
+        String data = null;
+        try {
+            JSONObject jsonObject = new JSONObject(jsonResults);
+            data = jsonObject.getString(resultToSave);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return data;
     }
 }
