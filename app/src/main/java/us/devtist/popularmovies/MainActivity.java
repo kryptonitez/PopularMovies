@@ -22,7 +22,7 @@ import java.util.StringTokenizer;
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<String> movieImg;
-    private ArrayList<String> movieId;
+    private ArrayList<Integer> movieIds;
     private GridView gridView;
 
     @Override
@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-                intent.putExtra("EXTRA_INT", position);
+                Log.v("movie id mainactivity", String.valueOf(movieIds.get(position)));
+                intent.putExtra("EXTRA_INT", movieIds.get(position));
                 startActivity(intent);
             }
         });
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
            Log.e("Search Results", searchResults);
+            movieIds = new JsonUtils().saveToIntArray(searchResults, "results", "id");
             return  searchResults;
         }
 
