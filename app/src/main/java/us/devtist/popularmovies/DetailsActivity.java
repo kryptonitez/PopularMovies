@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,15 +30,20 @@ public class DetailsActivity extends AppCompatActivity {
     private TextView textViewLength;
     private TextView textViewSummary;
     private TextView textViewRating;
+    private ImageView imageViewPoster;
+    private TextView textViewTitle;
     private String movieTitle;
     private String movieSummary;
+    private String movieReleaseYear;
     private Integer movieLength;
     private Integer movieRating;
     private String moviePosterPath;
     private Integer movieId;
     private ListView listView;
+    private String posterPathUrl;
     Parcelable state;
     Movie movie;
+    private String apiKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +53,15 @@ public class DetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         movie = new Movie();
         movieId = intent.getIntExtra("EXTRA_INT", 0);
-        Log.v("movie id", String.valueOf(movieId));
+        apiKey = intent.getStringExtra("EXTRA_APIKEY");
+        Log.v("apiKey", apiKey);
 
         textViewYear = (TextView) findViewById(R.id.textViewYear);
         textViewLength = (TextView) findViewById(R.id.textViewLength);
         textViewSummary = (TextView) findViewById(R.id.textViewSummary);
         textViewRating = (TextView) findViewById(R.id.textViewRating);
+        textViewTitle = (TextView)findViewById(R.id.textViewTitle);
+        imageViewPoster = (ImageView)findViewById(R.id.imageViewMovie);
 
         listView = (ListView) findViewById(R.id.listview_details);
         new MovieInfoQuery().execute();
@@ -87,7 +98,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         protected String doInBackground(String... params) {
 
-            Uri trailerUri = Uri.parse("https://api.themoviedb.org/3/movie/" + movieId + "/videos?api_key=&language=en-US").buildUpon().build();
+            Uri trailerUri = Uri.parse("https://api.themoviedb.org/3/movie/" + movieId + "/videos?api_key=" + apiKey + "&language=en-US").buildUpon().build();
             URL trailerUrl = NetworkUtils.buildUrl(trailerUri);
             String trailerResults = null;
             try {
@@ -99,7 +110,7 @@ public class DetailsActivity extends AppCompatActivity {
 
             String movieDetailResults = null;
             try {
-                Uri movieUri = Uri.parse("https://api.themoviedb.org/3/movie/" + movieId + "?api_key=&language=en-US").buildUpon().build();
+                Uri movieUri = Uri.parse("https://api.themoviedb.org/3/movie/" + movieId + "?api_key=" + apiKey + "&language=en-US").buildUpon().build();
                 URL movieDetailsUrl = NetworkUtils.buildUrl(movieUri);
                 movieDetailResults = NetworkUtils.HttpMethod("GET", movieDetailsUrl);
                 movieTitle = new JsonUtils().saveToString(movieDetailResults, "original_title");
@@ -114,6 +125,10 @@ public class DetailsActivity extends AppCompatActivity {
                 movie.setRuntime(movieLength);
                 movieRating = new JsonUtils().saveToInteger(movieDetailResults, "vote_average");
                 movie.setRating(movieRating);
+                movieReleaseYear = new JsonUtils().saveToString(movieDetailResults, "release_date");
+                movieReleaseYear = movieReleaseYear.substring(0,4);
+                movie.setReleaseYear(movieReleaseYear);
+                posterPathUrl = "https://image.tmdb.org/t/p/w500" + movie.getPosterPath();
                 Log.v("MovieTitle", movie.getTitle());
 
             } catch (IOException e){
@@ -130,7 +145,11 @@ public class DetailsActivity extends AppCompatActivity {
             listView.setAdapter(adapter);
             textViewSummary.setText(movie.getOverview());
             textViewLength.setText(String.valueOf(movie.getRuntime()));
-            textViewRating.setText(String.valueOf(movie.getRating()));
+            textViewRating.setText(String.valueOf(movie.getRating()) + "/10");
+            textViewTitle.setText(String.valueOf(movie.getTitle()));
+            textViewYear.setText(movie.getReleaseYear());
+            Picasso.with(DetailsActivity.this).load(posterPathUrl).into(imageViewPoster);
+
         }
     }
 

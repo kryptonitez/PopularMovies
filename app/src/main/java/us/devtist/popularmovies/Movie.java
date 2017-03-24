@@ -14,6 +14,7 @@ public class Movie {
     private Integer mId;
     private Integer mRuntime;
     private String mOverview;
+    private String mReleaseYear;
 
     public void setTitle(String title){
         mTitle = title;
@@ -39,6 +40,8 @@ public class Movie {
         mOverview = overview;
     }
 
+    public void setReleaseYear(String year){ mReleaseYear = year;}
+
     public String getTitle(){
         return mTitle;
     }
@@ -62,4 +65,6 @@ public class Movie {
     public String getOverview(){
         return mOverview;
     }
+
+    public String getReleaseYear() {return mReleaseYear;}
 }

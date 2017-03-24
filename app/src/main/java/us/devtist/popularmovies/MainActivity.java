@@ -19,11 +19,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+/** PLEASE REMEMBER TO FILL OUT THE apiKey or you will get an error
+ *
+ */
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<String> movieImg;
     private ArrayList<Integer> movieIds;
     private GridView gridView;
+    private final static String apiKey = "1d0b6eb47a92279860bb5060f9ae1129";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
                 Log.v("movie id mainactivity", String.valueOf(movieIds.get(position)));
                 intent.putExtra("EXTRA_INT", movieIds.get(position));
+                intent.putExtra("EXTRA_APIKEY", apiKey);
                 startActivity(intent);
             }
         });
@@ -54,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         protected String doInBackground(String... params) {
             Uri builtUri = Uri.parse("https://api.themoviedb.org/3/movie/popular").buildUpon()
-                    .appendQueryParameter("api_key", "")
+                    .appendQueryParameter("api_key",apiKey)
                     .appendQueryParameter("language", "en-US")
                     .build();
 
