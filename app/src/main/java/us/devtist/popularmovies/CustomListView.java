@@ -32,7 +32,8 @@ public class CustomListView extends ArrayAdapter<String> {
         TextView txtTitle = (TextView) rowView.findViewById(R.id.txt);
 
         ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
-        txtTitle.setText(trailer.get(position));
+        Integer trailerPosition = position + 1;
+        txtTitle.setText("Trailer " + String.valueOf(trailerPosition));
 
         imageView.setImageResource(R.drawable.play_button);
         return rowView;

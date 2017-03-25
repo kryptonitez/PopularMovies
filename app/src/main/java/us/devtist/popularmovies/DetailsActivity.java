@@ -85,7 +85,7 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Toast.makeText(DetailsActivity.this, "You Clicked at " + trailerKeys.get(position), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + trailerKeys.get(position))));
 
             }
         });
