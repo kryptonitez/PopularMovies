@@ -1,6 +1,7 @@
 package us.devtist.popularmovies;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +55,13 @@ public class GridViewAdapater extends BaseAdapter {
             int displayWidth = mContext.getResources().getDisplayMetrics().widthPixels;
             Log.v("displayHeight", String.valueOf(displayHeight));
             Log.v("displayWidth", String.valueOf(displayWidth));
-            imageView.setLayoutParams(new GridView.LayoutParams(displayWidth/2, displayHeight/2));
+            Resources resources = mContext.getResources();
+
+            if( resources.getBoolean(R.bool.is_landscape)!= true) {
+                imageView.setLayoutParams(new GridView.LayoutParams(displayWidth / 2, displayHeight / 2));
+            } else {
+                imageView.setLayoutParams(new GridView.LayoutParams(displayWidth / 2, displayHeight));
+            }
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         } else {
             imageView = (ImageView) convertView;

@@ -6,6 +6,9 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -27,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> movieImg;
     private ArrayList<Integer> movieIds;
     private GridView gridView;
-    private final static String apiKey = "1d0b6eb47a92279860bb5060f9ae1129";
+    private String sortBySelection;
+    private final static String apiKey = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         gridView = (GridView) findViewById(R.id.gridview);
 
+        sortBySelection = null;
         new HttpQueryTask().execute();
-
         if (savedInstanceState != null) {
             gridView.setSelection(savedInstanceState.getInt("gridView", 0));
         }
@@ -58,20 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         protected String doInBackground(String... params) {
-            Uri builtUri = Uri.parse("https://api.themoviedb.org/3/movie/popular").buildUpon()
-                    .appendQueryParameter("api_key",apiKey)
-                    .appendQueryParameter("language", "en-US")
-                    .build();
-
-            URL popularMovieUrl = NetworkUtils.buildUrl(builtUri);
             String searchResults = null;
-            try {
-                searchResults = NetworkUtils.HttpMethod("GET",popularMovieUrl);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-           Log.e("Search Results", searchResults);
-            movieIds = new JsonUtils().saveToIntArray(searchResults, "results", "id");
+            searchResults = getSortByStatus();
             return  searchResults;
         }
 
@@ -85,7 +77,63 @@ public class MainActivity extends AppCompatActivity {
             }
             gridView.setAdapter(new GridViewAdapater(MainActivity.this, movieImg));
         }
-    }
+
+        private String getSortByStatus() {
+            String searchResults = null;
+            if (sortBySelection != null) {
+                switch (sortBySelection) {
+                    case "mostpopular":
+                        Uri builtUri = Uri.parse("https://api.themoviedb.org/3/movie/popular").buildUpon()
+                                .appendQueryParameter("api_key", apiKey)
+                                .appendQueryParameter("language", "en-US")
+                                .build();
+
+                        URL popularMovieUrl = NetworkUtils.buildUrl(builtUri);
+
+                        try {
+                            searchResults = NetworkUtils.HttpMethod("GET", popularMovieUrl);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Log.e("Search Results", searchResults);
+                        movieIds = new JsonUtils().saveToIntArray(searchResults, "results", "id");
+                        return searchResults;
+
+                    case "toprated":
+                        Uri topRatedUri = Uri.parse("https://api.themoviedb.org/3/movie/top_rated").buildUpon()
+                                .appendQueryParameter("api_key", apiKey)
+                                .appendQueryParameter("language", "en-US")
+                                .build();
+
+                        URL topRatedUrl = NetworkUtils.buildUrl(topRatedUri);
+
+                        try {
+                            searchResults = NetworkUtils.HttpMethod("GET", topRatedUrl);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Log.e("Search Results", searchResults);
+                        movieIds = new JsonUtils().saveToIntArray(searchResults, "results", "id");
+                        return searchResults;
+                }
+            }
+                    Uri defaultUri = Uri.parse("https://api.themoviedb.org/3/movie/popular").buildUpon()
+                            .appendQueryParameter("api_key",apiKey)
+                            .appendQueryParameter("language", "en-US")
+                            .build();
+
+                    URL defaultUrl = NetworkUtils.buildUrl(defaultUri);
+
+                    try {
+                        searchResults = NetworkUtils.HttpMethod("GET",defaultUrl);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Log.e("Search Results", searchResults);
+                    movieIds = new JsonUtils().saveToIntArray(searchResults, "results", "id");
+            return  searchResults;
+            }
+        }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -93,4 +141,28 @@ public class MainActivity extends AppCompatActivity {
         outState.putInt("gridView", gridView.getFirstVisiblePosition());
         Log.v("outState", String.valueOf(gridView.getFirstVisiblePosition()));
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.mostpopular:
+                sortBySelection = "mostpopular";
+                new HttpQueryTask().execute();
+                return true;
+            case R.id.toprated:
+                sortBySelection = "toprated";
+                new HttpQueryTask().execute();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

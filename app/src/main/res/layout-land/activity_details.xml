@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textViewTitle"
-        android:text="@string/app_name"
         android:gravity="center_vertical"
         android:paddingLeft="16dp"
         android:textSize="32sp"
@@ -39,25 +38,22 @@
             <TextView
                 android:id="@+id/textViewYear"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/textViewLength"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="120 mins" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/textViewRating"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="8.3/10" />
+                android:layout_height="wrap_content" />
 
             <ImageButton
                 android:layout_width="40dp"
-                android:layout_height="16dp"
-                android:src="@drawable/placeholder_img_150x50" />
+                android:layout_height="40dp"
+                android:src="@drawable/starbutton" />
 <ScrollView
     android:layout_width="fill_parent"
     android:layout_height="72dp">
@@ -65,8 +61,7 @@
                 android:id="@+id/textViewSummary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_bottom"
-                android:text="@string/app_name" />
+                android:background="@drawable/border_bottom" />
 </ScrollView>
 
             <TextView

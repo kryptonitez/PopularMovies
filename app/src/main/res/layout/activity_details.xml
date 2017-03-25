@@ -31,21 +31,21 @@
                 android:id="@+id/textViewYear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/app_name" />
+                 />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textViewLength"
-                android:text="120 mins"/>
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textViewRating"
-                android:text="8.3/10"/>
+                />
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/placeholder_img_150x50"/>
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/starbutton"/>
 
         </LinearLayout>
     </LinearLayout>
